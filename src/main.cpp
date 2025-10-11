@@ -9,7 +9,7 @@ int main()
             << std::endl;
 
   // create window and set up
-  sf::RenderWindow window(sf::VideoMode(1080, 720), "Critter Crossing");
+  sf::RenderWindow window(sf::VideoMode(1700, 1100), "Critter Crossing");
   window.setFramerateLimit(60);
 
   //initialise an instance of the game class
@@ -34,12 +34,25 @@ int main()
     sf::Time time = clock.restart();
     float dt = time.asSeconds();
 
-    //'process inputs' element of the game loop
+    // player inputs 
     while (window.pollEvent(event))
     {
-      // "close requested" event: we close the window
-      if (event.type == sf::Event::Closed)
-        window.close();
+        
+        if (event.type == sf::Event::Closed)
+        {
+            window.close();
+        }
+
+        if (event.type == sf::Event::MouseButtonPressed)
+        {
+            game.mouseClicked(event);
+        }
+
+        if (event.type == sf::Event::KeyPressed)
+        {
+            game.keyPressed(event);
+        }
+
     }
 
 

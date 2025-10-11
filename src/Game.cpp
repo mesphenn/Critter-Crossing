@@ -42,4 +42,12 @@ void Game::keyPressed(sf::Event event)
 
 }
 
+void Game::menuState()
+{
+	in_menu = true;
+
+	play_option.setString("play");
+	quit_option.setString("quit");
+}
+
 

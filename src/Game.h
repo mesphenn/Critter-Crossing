@@ -1,6 +1,6 @@
 
-#ifndef PLATFORMER_GAME_H
-#define PLATFORMER_GAME_H
+#ifndef CRITTERCROSSING_GAME_H
+#define CRITTERCROSSING_GAME_H
 
 #include <SFML/Graphics.hpp>
 
@@ -14,12 +14,21 @@ class Game
   void render();
   void mouseClicked(sf::Event event);
   void keyPressed(sf::Event event);
+  void menuState();
 
  private:
   sf::RenderWindow& window;
-  sf::Sprite ball;
-  sf::Texture ball_texture;
+  sf::Sprite background;
+  sf::Texture background_texture;
+
+  bool in_menu = true;
+  sf::Text play_option;
+  sf::Text quit_option;
+  bool play_selected = false;
+  bool quit_selected = false;
+
+  
 
 };
 
-#endif // PLATFORMER_GAME_H
+#endif // CRITTERCROSSING_GAME_H
