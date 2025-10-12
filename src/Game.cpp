@@ -54,12 +54,38 @@ void Game::mouseClicked(sf::Event event)
   //get the click position
   sf::Vector2i click = sf::Mouse::getPosition(window);
 
+  if (in_menu == true)
+  {
+	  // start
+	  if (menuCollision(click, play_option))
+	  {
+		  std::cout << "play screen";
+	  }
+	  // quit
+	  else if (menuCollision(click, quit_option))
+	  {
+		  window.close();
+	  }
+  }
 
 }
 
 void Game::keyPressed(sf::Event event)
 {
 
+}
+
+// collision check system for menu options
+bool Game::menuCollision(sf::Vector2i click, sf::Text text)
+{
+	if (click.x > text.getPosition().x && click.x < text.getPosition().x + text.getGlobalBounds().width && click.y > text.getPosition().y && click.y < text.getPosition().y + text.getGlobalBounds().height)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void Game::menuState()
@@ -80,6 +106,10 @@ void Game::menuState()
 	quit_option.setFillColor(sf::Color(255, 255, 255, 255));
 	quit_option.setPosition(window.getSize().x / 2 - quit_option.getGlobalBounds().width / 2, 800);
 
+}
+
+void Game::gameState()
+{
 
 }
 
