@@ -26,7 +26,10 @@ bool Game::init()
 	{
 		std::cout << "menu background failed to load\n";
 	}
-	menu_bg.setTexture(menu_bg_txt);
+	if (!main_bg_txt.loadFromFile("../Data/my_stuff/mainscreen.png"))
+	{
+		std::cout << "main background failed to load\n";
+	}
 
 	return true;
 }
@@ -37,15 +40,20 @@ void Game::update(float dt)
 	{
 		menuState();
 	}
+
 }
 
 void Game::render()
 {
 	if (in_menu == true)
 	{
-		window.draw(menu_bg);
+		window.draw(background);
 		window.draw(play_option);
 		window.draw(quit_option);
+	}
+	else if (in_game == true)
+	{
+		window.draw(background);
 	}
 }
 
@@ -59,7 +67,8 @@ void Game::mouseClicked(sf::Event event)
 	  // start
 	  if (menuCollision(click, play_option))
 	  {
-		  std::cout << "play screen";
+		  std::cout << "gameplay";
+		  gameState();
 	  }
 	  // quit
 	  else if (menuCollision(click, quit_option))
@@ -88,9 +97,12 @@ bool Game::menuCollision(sf::Vector2i click, sf::Text text)
 	}
 }
 
+// menu screen
 void Game::menuState()
 {
 	in_menu = true;
+	in_game = false;
+	background.setTexture(menu_bg_txt);
 
 	// play button
 	play_option.setString("START");
@@ -108,9 +120,13 @@ void Game::menuState()
 
 }
 
+// main game 
 void Game::gameState()
 {
+	in_menu = false;
+	in_game = true;
 
+	background.setTexture(main_bg_txt);
 }
 
 

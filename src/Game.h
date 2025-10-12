@@ -21,10 +21,10 @@ class Game
   // generic
   sf::RenderWindow& window;
   bool menuCollision(sf::Vector2i click, sf::Text text);
+  sf::Sprite background;
 
   // menu screen
   bool in_menu = true;
-  sf::Sprite menu_bg;
   sf::Texture menu_bg_txt;
   sf::Text play_option;
   sf::Text quit_option;
@@ -34,7 +34,7 @@ class Game
 
   // game screen
   bool in_game = false;
-
+  sf::Texture main_bg_txt;
   
 
 };
