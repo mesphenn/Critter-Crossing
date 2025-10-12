@@ -18,12 +18,13 @@ class Game
 
  private:
   sf::RenderWindow& window;
-  sf::Sprite background;
-  sf::Texture background_texture;
+  sf::Sprite menu_bg;
+  sf::Texture menu_bg_txt;
 
   bool in_menu = true;
   sf::Text play_option;
   sf::Text quit_option;
+  sf::Font menu_font;
   bool play_selected = false;
   bool quit_selected = false;
 

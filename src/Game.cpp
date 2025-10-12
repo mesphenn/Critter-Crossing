@@ -15,18 +15,38 @@ Game::~Game()
 
 bool Game::init()
 {
+	// fonts
+	if (!menu_font.loadFromFile("../Data/Fonts/aller.bold.ttf"))
+	{
+		std::cout << "Menu Font Failed to load\n";
+	}
 
-  return true;
+	// backgrounds
+	if (!menu_bg_txt.loadFromFile("../Data/my_stuff/menuscreen.png"))
+	{
+		std::cout << "menu background failed to load\n";
+	}
+	menu_bg.setTexture(menu_bg_txt);
+
+	return true;
 }
 
 void Game::update(float dt)
 {
-
+	if (in_menu == true)
+	{
+		menuState();
+	}
 }
 
 void Game::render()
 {
-
+	if (in_menu == true)
+	{
+		window.draw(menu_bg);
+		window.draw(play_option);
+		window.draw(quit_option);
+	}
 }
 
 void Game::mouseClicked(sf::Event event)
@@ -46,8 +66,21 @@ void Game::menuState()
 {
 	in_menu = true;
 
-	play_option.setString("play");
-	quit_option.setString("quit");
+	// play button
+	play_option.setString("START");
+	play_option.setFont(menu_font);
+	play_option.setCharacterSize(80);
+	play_option.setFillColor(sf::Color(255,255,255,255));
+	play_option.setPosition(window.getSize().x / 2 - play_option.getGlobalBounds().width / 2, 650);
+
+	// quit button
+	quit_option.setString("QUIT");
+	quit_option.setFont(menu_font);
+	quit_option.setCharacterSize(80);
+	quit_option.setFillColor(sf::Color(255, 255, 255, 255));
+	quit_option.setPosition(window.getSize().x / 2 - quit_option.getGlobalBounds().width / 2, 800);
+
+
 }
 
 
