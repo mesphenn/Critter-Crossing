@@ -10,7 +10,10 @@ Game::Game(sf::RenderWindow& game_window)
 
 Game::~Game()
 {
-
+	delete[] animals;
+	delete[] passports;
+	delete character;
+	delete passport;
 }
 
 bool Game::init()
@@ -29,6 +32,36 @@ bool Game::init()
 	if (!main_bg_txt.loadFromFile("../Data/my_stuff/mainscreen.png"))
 	{
 		std::cout << "main background failed to load\n";
+	}
+
+	character = new sf::Sprite;
+	passport = new sf::Sprite;
+
+	// loading animal texture arrays
+	if (!animals[0].loadFromFile("../Data/Critter Crossing Customs/gorilla.png"))
+	{
+		std::cout << "Gorilla texture failed to load\n";
+	}
+	if (!animals[1].loadFromFile("../Data/Critter Crossing Customs/moose.png"))
+	{
+		std::cout << "Moose texture failed to load\n";
+	}
+	if (!animals[2].loadFromFile("../Data/Critter Crossing Customs/penguin.png"))
+	{
+		std::cout << "Penguin texture failed to load\n";
+	}
+	// loading passport texture arrays
+	if (!passports[0].loadFromFile("../Data/Critter Crossing Customs/gorilla passport.png"))
+	{
+		std::cout << "Gorilla passport texture failed to load\n";
+	}
+	if (!passports[1].loadFromFile("../Data/Critter Crossing Customs/moose passport.png"))
+	{
+		std::cout << "Moose passport texture failed to load\n";
+	}
+	if (!passports[2].loadFromFile("../Data/Critter Crossing Customs/penguin passport.png"))
+	{
+		std::cout << "Penguin passport texture failed to load\n";
 	}
 
 	return true;
@@ -54,6 +87,8 @@ void Game::render()
 	else if (in_game == true)
 	{
 		window.draw(background);
+		window.draw(*character);
+		window.draw(*passport);
 	}
 }
 
@@ -67,7 +102,6 @@ void Game::mouseClicked(sf::Event event)
 	  // start
 	  if (menuCollision(click, play_option))
 	  {
-		  std::cout << "gameplay";
 		  gameState();
 	  }
 	  // quit
@@ -127,6 +161,33 @@ void Game::gameState()
 	in_game = true;
 
 	background.setTexture(main_bg_txt);
+	newAnimal();
 }
 
+void Game::newAnimal()
+{
+	passport_accepted = false;
+	passport_rejected = false;
+
+	int animal_index = rand() % 3;
+	int passport_index = rand() % 3;
+
+	if (animal_index == passport_index)
+	{
+		should_accept = true;
+	}
+	else
+	{
+		should_accept = false;
+	}
+
+	character->setTexture(animals[animal_index], true);
+	character->setScale(2,2);
+	character->setPosition(window.getSize().x / 11.5, window.getSize().y / 2);
+
+	passport->setTexture(passports[passport_index]);
+	passport->setScale(0.9, 0.9);
+	passport->setPosition(window.getSize().x / 2, window.getSize().y / 3);
+
+}
 

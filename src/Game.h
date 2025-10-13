@@ -14,6 +14,7 @@ class Game
   void render();
   void mouseClicked(sf::Event event);
   void keyPressed(sf::Event event);
+  void newAnimal();
   void menuState();
   void gameState();
 
@@ -36,6 +37,14 @@ class Game
   bool in_game = false;
   sf::Texture main_bg_txt;
   
+  sf::Sprite* character;
+  sf::Sprite* passport;
+  sf::Texture* animals = new sf::Texture[3];
+  sf::Texture* passports = new sf::Texture[3];
+
+  bool passport_accepted = false;
+  bool passport_rejected = false;
+  bool should_accept = false;
 
 };
 
