@@ -15,6 +15,7 @@ class Game
   void mouseClicked(sf::Event event);
   void keyPressed(sf::Event event);
   void newAnimal();
+  void dragSprite(sf::Sprite* sprite);
   void menuState();
   void gameState();
 
@@ -45,6 +46,7 @@ class Game
   bool passport_accepted = false;
   bool passport_rejected = false;
   bool should_accept = false;
+  sf::Sprite* dragged = nullptr;
 
 };
 
