@@ -14,6 +14,7 @@ class Game
   void render();
   void mouseClicked(sf::Event event);
   void keyPressed(sf::Event event);
+  void mouseButtonReleased(sf::Event event);
   void newAnimal();
   void dragSprite(sf::Sprite* sprite);
   void menuState();
@@ -37,6 +38,7 @@ class Game
   // game screen
   bool in_game = false;
   sf::Texture main_bg_txt;
+  sf::Vector2f drag_offset;
   
   sf::Sprite* character;
   sf::Sprite* passport;
