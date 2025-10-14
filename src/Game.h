@@ -17,6 +17,7 @@ class Game
   void mouseButtonReleased(sf::Event event);
   void newAnimal();
   void dragSprite(sf::Sprite* sprite);
+  void stampPosition();
   void menuState();
   void gameState();
 
@@ -54,11 +55,11 @@ class Game
   sf::Texture accept_button_txt;
   Stamps reject_button;
   sf::Texture reject_button_txt;
-  sf::Sprite accept;
+  sf::Sprite stamp;
   sf::Texture accept_txt;
-  sf::Sprite reject;
   sf::Texture reject_txt;
   bool show_stamps = false;
+  bool stamped = false;
 
 };
 

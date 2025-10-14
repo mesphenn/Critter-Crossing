@@ -73,13 +73,11 @@ bool Game::init()
 	{
 		std::cout << " Reject texture failed to load";
 	}
-	reject.setTexture(reject_txt);
 
 	if (!accept_txt.loadFromFile("../Data/Critter Crossing Customs/accept.png"))
 	{
 		std::cout << " Accept texture failed to load";
 	}
-	accept.setTexture(accept_txt);
 
 
 	return true;
@@ -94,6 +92,11 @@ void Game::update(float dt)
 	if (in_game == true)
 	{
 		dragSprite(dragged);
+		
+		if (stamped == true)
+		{
+			stampPosition();
+		}
 	}
 
 }
@@ -111,9 +114,16 @@ void Game::render()
 		window.draw(background);
 		window.draw(*character);
 		window.draw(*passport);
+		window.draw(stamp);
 
-		if (show_stamps == true)
+		if (show_stamps == true && stamped == false)
 		{
+			window.draw(*reject_button.getSprite());
+			window.draw(*accept_button.getSprite());
+		}
+		if (show_stamps == true && stamped == true)
+		{
+			window.draw(stamp);
 			window.draw(*reject_button.getSprite());
 			window.draw(*accept_button.getSprite());
 		}
@@ -122,47 +132,98 @@ void Game::render()
 
 void Game::mouseClicked(sf::Event event)
 {
-  //get the click position
-  sf::Vector2i click = sf::Mouse::getPosition(window);
+	//get the click position
+	sf::Vector2i click = sf::Mouse::getPosition(window);
 
-  if (in_menu == true)
-  {
-	  // start
-	  if (menuCollision(click, play_option))
-	  {
-		  gameState();
-	  }
-	  // quit
-	  else if (menuCollision(click, quit_option))
-	  {
-		  window.close();
-	  }
-  }
+	if (in_menu == true)
+	{
+		// start
+		if (menuCollision(click, play_option))
+		{
+			gameState();
+		}
+		// quit
+		else if (menuCollision(click, quit_option))
+		{
+			window.close();
+		}
+	}
 
-  else if (in_game == true)
-  {
-	  // dragging the passport
-	  if (event.mouseButton.button == sf::Mouse::Left)
-	  {
-		  sf::Vector2i click = sf::Mouse::getPosition(window);
-		  sf::Vector2f clickf = static_cast<sf::Vector2f>(click);
+	else if (in_game == true)
+	{
+		// dragging the passport
+		if (event.mouseButton.button == sf::Mouse::Left)
+		{
+			sf::Vector2i click = sf::Mouse::getPosition(window);
+			sf::Vector2f clickf = static_cast<sf::Vector2f>(click);
 
-		  if (passport->getGlobalBounds().contains(clickf))
-		  {
-			  dragged = passport;
-		  }
+			if (passport->getGlobalBounds().contains(clickf) && stamped == false)
+			{
+				dragged = passport;
+			}
+			else if (passport->getGlobalBounds().contains(clickf) && stamped == true)
+			{
+				dragged = passport;
+			}
 
-	  }
-	  // showing the stamps
-	  else if (event.mouseButton.button == sf::Mouse::Right && show_stamps == false)
-	  {
-		  show_stamps = true;
-	  }
-	  else if (event.mouseButton.button == sf::Mouse::Right && show_stamps == true)
-	  {
-		  show_stamps = false;
-	  }
-  }
+			// if accept button is pressed
+			if (accept_button.getSprite()->getGlobalBounds().contains(clickf))
+			{
+				// making sure passport is under accept button
+				if ((((((accept_button.getSprite()->getPosition().x +
+					accept_button.getSprite()->getGlobalBounds().width >
+					passport->getPosition().x) &&
+					(accept_button.getSprite()->getPosition().x <
+						passport->getPosition().x + passport->getGlobalBounds().width)) &&
+					(accept_button.getSprite()->getPosition().y +
+						accept_button.getSprite()->getGlobalBounds().height >
+						passport->getPosition().y) &&
+					accept_button.getSprite()->getPosition().y <
+					passport->getPosition().y + passport->getGlobalBounds().height))))
+				{
+					passport_accepted = true;
+					passport_rejected = false;
+					stamp.setTexture(accept_txt);
+					stamped = true;
+					
+				}
+
+			}
+			// if reject button is pressed
+			else if (reject_button.getSprite()->getGlobalBounds().contains(clickf))
+			{
+				// making sure passport is under reject button
+				if ((((((reject_button.getSprite()->getPosition().x +
+					reject_button.getSprite()->getGlobalBounds().width >
+					passport->getPosition().x) &&
+					(reject_button.getSprite()->getPosition().x <
+						passport->getPosition().x + passport->getGlobalBounds().width)) &&
+					(reject_button.getSprite()->getPosition().y +
+						reject_button.getSprite()->getGlobalBounds().height >
+						passport->getPosition().y) &&
+					reject_button.getSprite()->getPosition().y <
+					passport->getPosition().y + passport->getGlobalBounds().height))))
+				{
+					passport_accepted = false;
+					passport_rejected = true;
+					stamp.setTexture(reject_txt);
+					stamped = true;
+					
+				}
+			}
+			
+
+		}
+		// showing the stamps
+		else if (event.mouseButton.button == sf::Mouse::Right && show_stamps == false)
+		{
+			show_stamps = true;
+		}
+		else if (event.mouseButton.button == sf::Mouse::Right && show_stamps == true)
+		{
+			show_stamps = false;
+		}
+	}
 
 }
 
@@ -224,9 +285,10 @@ void Game::gameState()
 	background.setTexture(main_bg_txt);
 	newAnimal();
 
-	// stamp setup
+	// stamp button setup
 	reject_button.getSprite()->setPosition(window.getSize().x / 1.3, window.getSize().y / 2);
 	accept_button.getSprite()->setPosition(window.getSize().x / 2.25, window.getSize().y / 2);
+
 }
 
 void Game::newAnimal()
@@ -269,3 +331,7 @@ void Game::dragSprite(sf::Sprite* sprite)
 	}
 }
 
+void Game::stampPosition()
+{
+	stamp.setPosition(passport->getPosition().x + 20, passport->getPosition().y - 20);
+}
