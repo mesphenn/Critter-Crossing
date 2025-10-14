@@ -3,6 +3,7 @@
 #define CRITTERCROSSING_GAME_H
 
 #include <SFML/Graphics.hpp>
+#include "stamps.h"
 
 class Game
 {
@@ -13,7 +14,6 @@ class Game
   void update(float dt);
   void render();
   void mouseClicked(sf::Event event);
-  void keyPressed(sf::Event event);
   void mouseButtonReleased(sf::Event event);
   void newAnimal();
   void dragSprite(sf::Sprite* sprite);
@@ -49,6 +49,16 @@ class Game
   bool passport_rejected = false;
   bool should_accept = false;
   sf::Sprite* dragged = nullptr;
+
+  Stamps accept_button;
+  sf::Texture accept_button_txt;
+  Stamps reject_button;
+  sf::Texture reject_button_txt;
+  sf::Sprite accept;
+  sf::Texture accept_txt;
+  sf::Sprite reject;
+  sf::Texture reject_txt;
+  bool show_stamps = false;
 
 };
 

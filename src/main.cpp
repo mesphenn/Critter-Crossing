@@ -53,11 +53,6 @@ int main()
             game.mouseButtonReleased(event);
         }
 
-        if (event.type == sf::Event::KeyPressed)
-        {
-            game.keyPressed(event);
-        }
-
     }
 
 

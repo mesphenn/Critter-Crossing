@@ -34,6 +34,7 @@ bool Game::init()
 		std::cout << "main background failed to load\n";
 	}
 
+	// new characters/passports
 	character = new sf::Sprite;
 	passport = new sf::Sprite;
 
@@ -63,6 +64,23 @@ bool Game::init()
 	{
 		std::cout << "Penguin passport texture failed to load\n";
 	}
+	
+	// stamp textures
+	accept_button.initialiseSprite(accept_button_txt, "../Data/Critter Crossing Customs/accept button.png");
+	reject_button.initialiseSprite(reject_button_txt, "../Data/Critter Crossing Customs/reject button.png");
+
+	if (!reject_txt.loadFromFile("../Data/Critter Crossing Customs/reject.png"))
+	{
+		std::cout << " Reject texture failed to load";
+	}
+	reject.setTexture(reject_txt);
+
+	if (!accept_txt.loadFromFile("../Data/Critter Crossing Customs/accept.png"))
+	{
+		std::cout << " Accept texture failed to load";
+	}
+	accept.setTexture(accept_txt);
+
 
 	return true;
 }
@@ -93,6 +111,12 @@ void Game::render()
 		window.draw(background);
 		window.draw(*character);
 		window.draw(*passport);
+
+		if (show_stamps == true)
+		{
+			window.draw(*reject_button.getSprite());
+			window.draw(*accept_button.getSprite());
+		}
 	}
 }
 
@@ -114,8 +138,10 @@ void Game::mouseClicked(sf::Event event)
 		  window.close();
 	  }
   }
+
   else if (in_game == true)
   {
+	  // dragging the passport
 	  if (event.mouseButton.button == sf::Mouse::Left)
 	  {
 		  sf::Vector2i click = sf::Mouse::getPosition(window);
@@ -125,13 +151,25 @@ void Game::mouseClicked(sf::Event event)
 		  {
 			  dragged = passport;
 		  }
+
+	  }
+	  // showing the stamps
+	  else if (event.mouseButton.button == sf::Mouse::Right && show_stamps == false)
+	  {
+		  show_stamps = true;
+	  }
+	  else if (event.mouseButton.button == sf::Mouse::Right && show_stamps == true)
+	  {
+		  show_stamps = false;
 	  }
   }
 
 }
 
+
 void Game::mouseButtonReleased(sf::Event event)
 {
+	// releasing the passport
 	if (in_game == true)
 	{
 		dragged = nullptr;
@@ -139,10 +177,6 @@ void Game::mouseButtonReleased(sf::Event event)
 	
 }
 
-void Game::keyPressed(sf::Event event)
-{
-
-}
 
 // collision check system for menu options
 bool Game::menuCollision(sf::Vector2i click, sf::Text text)
@@ -162,6 +196,7 @@ void Game::menuState()
 {
 	in_menu = true;
 	in_game = false;
+	show_stamps = false;
 	background.setTexture(menu_bg_txt);
 
 	// play button
@@ -188,6 +223,10 @@ void Game::gameState()
 
 	background.setTexture(main_bg_txt);
 	newAnimal();
+
+	// stamp setup
+	reject_button.getSprite()->setPosition(window.getSize().x / 1.3, window.getSize().y / 2);
+	accept_button.getSprite()->setPosition(window.getSize().x / 2.25, window.getSize().y / 2);
 }
 
 void Game::newAnimal()
