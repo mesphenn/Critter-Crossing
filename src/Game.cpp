@@ -113,17 +113,21 @@ void Game::render()
 	{
 		window.draw(background);
 		window.draw(*character);
-		window.draw(*passport);
-		window.draw(stamp);
+		window.draw(passes_display);
+		window.draw(failure_display);
 
-		if (show_stamps == true && stamped == false)
+		if (returned == false && stamped == false)
 		{
-			window.draw(*reject_button.getSprite());
-			window.draw(*accept_button.getSprite());
+			window.draw(*passport);
 		}
-		if (show_stamps == true && stamped == true)
+		else if (returned == false && stamped == true)
 		{
+			window.draw(*passport);
 			window.draw(stamp);
+		}
+
+		if (show_stamps == true)
+		{
 			window.draw(*reject_button.getSprite());
 			window.draw(*accept_button.getSprite());
 		}
@@ -151,12 +155,12 @@ void Game::mouseClicked(sf::Event event)
 
 	else if (in_game == true)
 	{
-		// dragging the passport
 		if (event.mouseButton.button == sf::Mouse::Left)
 		{
 			sf::Vector2i click = sf::Mouse::getPosition(window);
 			sf::Vector2f clickf = static_cast<sf::Vector2f>(click);
 
+			// dragging the passport
 			if (passport->getGlobalBounds().contains(clickf) && stamped == false)
 			{
 				dragged = passport;
@@ -167,7 +171,7 @@ void Game::mouseClicked(sf::Event event)
 			}
 
 			// if accept button is pressed
-			if (accept_button.getSprite()->getGlobalBounds().contains(clickf))
+			if (show_stamps == true && accept_button.getSprite()->getGlobalBounds().contains(clickf))
 			{
 				// making sure passport is under accept button
 				if ((((((accept_button.getSprite()->getPosition().x +
@@ -183,14 +187,18 @@ void Game::mouseClicked(sf::Event event)
 				{
 					passport_accepted = true;
 					passport_rejected = false;
-					stamp.setTexture(accept_txt);
 					stamped = true;
+					if (stamped == true)
+					{
+						stamp.setTexture(accept_txt);
+						stamp.setScale(1, 1);
+					}
 					
 				}
 
 			}
 			// if reject button is pressed
-			else if (reject_button.getSprite()->getGlobalBounds().contains(clickf))
+			else if (show_stamps == true && reject_button.getSprite()->getGlobalBounds().contains(clickf))
 			{
 				// making sure passport is under reject button
 				if ((((((reject_button.getSprite()->getPosition().x +
@@ -206,8 +214,12 @@ void Game::mouseClicked(sf::Event event)
 				{
 					passport_accepted = false;
 					passport_rejected = true;
-					stamp.setTexture(reject_txt);
 					stamped = true;
+					if (stamped == true)
+					{
+						stamp.setTexture(reject_txt);
+						stamp.setScale(1, 1);
+					}
 					
 				}
 			}
@@ -235,6 +247,13 @@ void Game::mouseButtonReleased(sf::Event event)
 	{
 		dragged = nullptr;
 	}
+
+	if (stamped == true && passport->getPosition().x <= character->getPosition().x + character->getGlobalBounds().width)
+	{
+		std::cout << "passport returned";
+		returned = true;
+		checkPassport();
+	}
 	
 }
 
@@ -258,6 +277,8 @@ void Game::menuState()
 	in_menu = true;
 	in_game = false;
 	show_stamps = false;
+	returned = false;
+	stamped = false;
 	background.setTexture(menu_bg_txt);
 
 	// play button
@@ -291,10 +312,17 @@ void Game::gameState()
 
 }
 
+void Game::endingState()
+{
+
+}
+
 void Game::newAnimal()
 {
 	passport_accepted = false;
 	passport_rejected = false;
+	stamped = false;
+	returned = false;
 
 	int animal_index = rand() % 3;
 	int passport_index = rand() % 3;
@@ -322,7 +350,6 @@ void Game::dragSprite(sf::Sprite* sprite)
 {
 	if (sprite != nullptr)
 	{
-
 		sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
 		sf::Vector2f mouse_positionf = static_cast<sf::Vector2f>(mouse_position);
 
@@ -334,4 +361,34 @@ void Game::dragSprite(sf::Sprite* sprite)
 void Game::stampPosition()
 {
 	stamp.setPosition(passport->getPosition().x + 100, passport->getPosition().y + 150);
+}
+
+
+void Game::checkPassport()
+{
+	if (passport_accepted == true && should_accept == true || passport_rejected == true && should_accept == false)
+	{
+		passes += 1;
+		passes_display.setString("CORRECT: " + std::to_string(passes));
+		passes_display.setFont(menu_font);
+		passes_display.setCharacterSize(50);
+		newAnimal();
+	}
+	else
+	{
+		if (failures < 3)
+		{
+			failures += 1;
+			failure_display.setString("FAILURES: " + std::to_string(failures));
+			failure_display.setFont(menu_font);
+			failure_display.setCharacterSize(50);
+			failure_display.setPosition(window.getSize().x - failure_display.getGlobalBounds().width - 20, 0);
+			newAnimal();
+		}
+		else
+		{
+			loser = true;
+			endingState();
+		}
+	}
 }

@@ -18,8 +18,10 @@ class Game
   void newAnimal();
   void dragSprite(sf::Sprite* sprite);
   void stampPosition();
+  void checkPassport();
   void menuState();
   void gameState();
+  void endingState();
 
  private:
   // generic
@@ -49,6 +51,7 @@ class Game
   bool passport_accepted = false;
   bool passport_rejected = false;
   bool should_accept = false;
+  bool returned = false;
   sf::Sprite* dragged = nullptr;
 
   Stamps accept_button;
@@ -60,6 +63,14 @@ class Game
   sf::Texture reject_txt;
   bool show_stamps = false;
   bool stamped = false;
+
+  int failures = 0;
+  sf::Text failure_display;
+  bool loser = false;
+  bool winner = false;
+
+  int passes = 0;
+  sf::Text passes_display;
 
 };
 
