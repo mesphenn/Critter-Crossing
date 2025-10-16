@@ -333,5 +333,5 @@ void Game::dragSprite(sf::Sprite* sprite)
 
 void Game::stampPosition()
 {
-	stamp.setPosition(passport->getPosition().x + 20, passport->getPosition().y - 20);
+	stamp.setPosition(passport->getPosition().x + 100, passport->getPosition().y + 150);
 }
