@@ -72,6 +72,12 @@ class Game
   int passes = 0;
   sf::Text passes_display;
 
+  // ending state
+  bool in_end = false;
+  sf::Texture end_bg_txt;
+  sf::Text end_message;
+  sf::Text return_option;
+
 };
 
 #endif // CRITTERCROSSING_GAME_H

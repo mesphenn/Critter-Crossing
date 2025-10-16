@@ -33,6 +33,10 @@ bool Game::init()
 	{
 		std::cout << "main background failed to load\n";
 	}
+	if (!end_bg_txt.loadFromFile("../Data/my_stuff/endscreen.png"))
+	{
+		std::cout << "end background failed to load\n";
+	}
 
 	// new characters/passports
 	character = new sf::Sprite;
@@ -132,6 +136,12 @@ void Game::render()
 			window.draw(*accept_button.getSprite());
 		}
 	}
+	else if (in_end == true)
+	{
+		window.draw(background);
+		window.draw(end_message);
+		window.draw(return_option);
+	}
 }
 
 void Game::mouseClicked(sf::Event event)
@@ -150,6 +160,13 @@ void Game::mouseClicked(sf::Event event)
 		else if (menuCollision(click, quit_option))
 		{
 			window.close();
+		}
+	}
+	else if (in_end == true)
+	{
+		if (menuCollision(click, return_option))
+		{
+			menuState();
 		}
 	}
 
@@ -239,7 +256,6 @@ void Game::mouseClicked(sf::Event event)
 
 }
 
-
 void Game::mouseButtonReleased(sf::Event event)
 {
 	// releasing the passport
@@ -256,7 +272,6 @@ void Game::mouseButtonReleased(sf::Event event)
 	}
 	
 }
-
 
 // collision check system for menu options
 bool Game::menuCollision(sf::Vector2i click, sf::Text text)
@@ -276,9 +291,15 @@ void Game::menuState()
 {
 	in_menu = true;
 	in_game = false;
+	in_end = false;
+
 	show_stamps = false;
 	returned = false;
 	stamped = false;
+	failures = 0;
+	passes = 0;
+
+
 	background.setTexture(menu_bg_txt);
 
 	// play button
@@ -302,6 +323,7 @@ void Game::gameState()
 {
 	in_menu = false;
 	in_game = true;
+	in_end = false;
 
 	background.setTexture(main_bg_txt);
 	newAnimal();
@@ -314,7 +336,29 @@ void Game::gameState()
 
 void Game::endingState()
 {
+	in_menu = false;
+	in_game = false;
+	in_end = true;
 
+	passes_display.setString("");
+	failure_display.setString("");
+
+
+	background.setTexture(end_bg_txt);
+
+	if (loser == true)
+	{
+		end_message.setString("You have let too many animals leave the Zoo\nwithout proper documentation. As a result,\nyou have been released from your duty\n early and without pay.\n\nBest of luck in your future endeavors.\n (Final Score: " + std::to_string(passes) + ")");
+		end_message.setFont(menu_font);
+		end_message.setColor(sf::Color(255, 255, 255, 255));
+		end_message.setCharacterSize(50);
+		end_message.setPosition(window.getSize().x / 2 - end_message.getGlobalBounds().width / 2, window.getSize().y / 2 - 200);
+	}
+
+	return_option.setString("RETURN TO MENU");
+	return_option.setFont(menu_font);
+	return_option.setCharacterSize(50);
+	return_option.setPosition(window.getSize().x / 2 - return_option.getGlobalBounds().width / 2, end_message.getPosition().y + end_message.getGlobalBounds().height + 100);
 }
 
 void Game::newAnimal()
@@ -363,7 +407,6 @@ void Game::stampPosition()
 	stamp.setPosition(passport->getPosition().x + 100, passport->getPosition().y + 150);
 }
 
-
 void Game::checkPassport()
 {
 	if (passport_accepted == true && should_accept == true || passport_rejected == true && should_accept == false)
@@ -376,16 +419,16 @@ void Game::checkPassport()
 	}
 	else
 	{
-		if (failures < 3)
+		failures += 1;
+		if (failures <= 2)
 		{
-			failures += 1;
 			failure_display.setString("FAILURES: " + std::to_string(failures));
 			failure_display.setFont(menu_font);
 			failure_display.setCharacterSize(50);
 			failure_display.setPosition(window.getSize().x - failure_display.getGlobalBounds().width - 20, 0);
 			newAnimal();
 		}
-		else
+		else if (failures == 3)
 		{
 			loser = true;
 			endingState();
