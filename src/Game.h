@@ -20,6 +20,7 @@ class Game
   void stampPosition();
   void checkPassport();
   void menuState();
+  void instructionState();
   void gameState();
   void endingState();
 
@@ -33,10 +34,15 @@ class Game
   bool in_menu = true;
   sf::Texture menu_bg_txt;
   sf::Text play_option;
+  sf::Text instruction_option;
   sf::Text quit_option;
   sf::Font menu_font;
   bool play_selected = false;
   bool quit_selected = false;
+
+  // instruction screen
+  bool in_instructions = false;
+  sf::Texture instruction_bg_txt;
 
   // game screen
   bool in_game = false;

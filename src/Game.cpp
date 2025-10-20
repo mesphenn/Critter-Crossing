@@ -37,6 +37,10 @@ bool Game::init()
 	{
 		std::cout << "end background failed to load\n";
 	}
+	if (!instruction_bg_txt.loadFromFile("../Data/my_stuff/instructionscreen.png"))
+	{
+		std::cout << "instruction background failed to load";
+	}
 
 	// new characters/passports
 	character = new sf::Sprite;
@@ -111,7 +115,13 @@ void Game::render()
 	{
 		window.draw(background);
 		window.draw(play_option);
+		window.draw(instruction_option);
 		window.draw(quit_option);
+	}
+	else if (in_instructions == true)
+	{
+		window.draw(background);
+		window.draw(play_option);
 	}
 	else if (in_game == true)
 	{
@@ -156,10 +166,21 @@ void Game::mouseClicked(sf::Event event)
 		{
 			gameState();
 		}
+		else if (menuCollision(click, instruction_option))
+		{
+			instructionState();
+		}
 		// quit
 		else if (menuCollision(click, quit_option))
 		{
 			window.close();
+		}
+	}
+	else if (in_instructions == true && in_menu == false)
+	{
+		if (menuCollision(click, play_option))
+		{
+			gameState();
 		}
 	}
 	else if (in_end == true)
@@ -290,6 +311,7 @@ bool Game::menuCollision(sf::Vector2i click, sf::Text text)
 void Game::menuState()
 {
 	in_menu = true;
+	in_instructions = false;
 	in_game = false;
 	in_end = false;
 
@@ -309,12 +331,39 @@ void Game::menuState()
 	play_option.setFillColor(sf::Color(255,255,255,255));
 	play_option.setPosition(window.getSize().x / 2 - play_option.getGlobalBounds().width / 2, 650);
 
+	// instruction button
+	instruction_option.setString("INSTRUCTIONS");
+	instruction_option.setFont(menu_font);
+	instruction_option.setCharacterSize(80);
+	instruction_option.setFillColor(sf::Color(255, 255, 255, 255));
+	instruction_option.setPosition(window.getSize().x / 2 - instruction_option.getGlobalBounds().width / 2, 760);
+
 	// quit button
 	quit_option.setString("QUIT");
 	quit_option.setFont(menu_font);
 	quit_option.setCharacterSize(80);
 	quit_option.setFillColor(sf::Color(255, 255, 255, 255));
-	quit_option.setPosition(window.getSize().x / 2 - quit_option.getGlobalBounds().width / 2, 800);
+	quit_option.setPosition(window.getSize().x / 2 - quit_option.getGlobalBounds().width / 2, 870);
+
+}
+
+// instruction screen
+void Game::instructionState()
+{
+	in_menu = false;
+	in_instructions = true;
+	in_game = false;
+	in_end = false;
+
+	background.setTexture(instruction_bg_txt);
+
+	// play option
+	play_option.setString("START");
+	play_option.setFont(menu_font);
+	play_option.setCharacterSize(80);
+	play_option.setFillColor(sf::Color(175, 135, 33, 255));
+	play_option.setPosition(window.getSize().x - play_option.getGlobalBounds().width - 50, 950);
+
 
 }
 
@@ -322,6 +371,7 @@ void Game::menuState()
 void Game::gameState()
 {
 	in_menu = false;
+	in_instructions = false;
 	in_game = true;
 	in_end = false;
 
@@ -337,6 +387,7 @@ void Game::gameState()
 void Game::endingState()
 {
 	in_menu = false;
+	in_instructions = false;
 	in_game = false;
 	in_end = true;
 
