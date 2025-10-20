@@ -100,6 +100,12 @@ void Game::update(float dt)
 	if (in_game == true)
 	{
 		dragSprite(dragged);
+
+		if (first_click == true)
+		{
+			countdown -= dt;
+			updateTime();
+		}
 		
 		if (stamped == true)
 		{
@@ -129,6 +135,7 @@ void Game::render()
 		window.draw(*character);
 		window.draw(passes_display);
 		window.draw(failure_display);
+		window.draw(countdown_display);
 
 		if (returned == false && stamped == false)
 		{
@@ -195,6 +202,7 @@ void Game::mouseClicked(sf::Event event)
 	{
 		if (event.mouseButton.button == sf::Mouse::Left)
 		{
+			first_click = true;
 			sf::Vector2i click = sf::Mouse::getPosition(window);
 			sf::Vector2f clickf = static_cast<sf::Vector2f>(click);
 
@@ -374,6 +382,7 @@ void Game::gameState()
 	in_instructions = false;
 	in_game = true;
 	in_end = false;
+	countdown = 20.0f;
 
 	background.setTexture(main_bg_txt);
 	newAnimal();
@@ -397,13 +406,27 @@ void Game::endingState()
 
 	background.setTexture(end_bg_txt);
 
+	if (passes > highscore)
+	{
+		highscore = passes;
+	}
+
 	if (loser == true)
 	{
-		end_message.setString("You have let too many animals leave the Zoo\nwithout proper documentation. As a result,\nyou have been released from your duty\n early and without pay.\n\nBest of luck in your future endeavors.\n (Final Score: " + std::to_string(passes) + ")");
+		end_message.setString("You have let too many animals leave the Zoo\nwithout proper documentation. As a result,\nyou have been released from your duty\n early and without pay.\n\nBest of luck in your future endeavors.\nFinal Score: " + std::to_string(passes) + "\nHigh Score: " + std::to_string(highscore));
 		end_message.setFont(menu_font);
 		end_message.setColor(sf::Color(255, 255, 255, 255));
 		end_message.setCharacterSize(50);
 		end_message.setPosition(window.getSize().x / 2 - end_message.getGlobalBounds().width / 2, window.getSize().y / 2 - 200);
+	}
+	else if (winner == true)
+	{
+		end_message.setString("YAY!\nFinal Score: " + std::to_string(passes) + "\nFailures: " + std::to_string(failures) + "\nHigh Score: " + std::to_string(highscore));
+		end_message.setFont(menu_font);
+		end_message.setColor(sf::Color(255, 255, 255, 255));
+		end_message.setCharacterSize(50);
+		end_message.setPosition(window.getSize().x / 2 - end_message.getGlobalBounds().width / 2, window.getSize().y / 2 - 200);
+
 	}
 
 	return_option.setString("RETURN TO MENU");
@@ -481,8 +504,28 @@ void Game::checkPassport()
 		}
 		else if (failures == 3)
 		{
+			first_click = false;
 			loser = true;
 			endingState();
 		}
+	}
+}
+
+void Game::updateTime()
+{
+	int time_remaining = countdown;
+	if (countdown >= 0)
+	{
+		countdown_display.setString(std::to_string(time_remaining));
+		countdown_display.setFont(menu_font);
+		countdown_display.setCharacterSize(80);
+		countdown_display.setColor(sf::Color(255, 255, 255, 255));
+		countdown_display.setPosition(window.getSize().x / 2, 0);
+	}
+	else
+	{
+		first_click = false;
+		winner = true;
+		endingState();
 	}
 }
