@@ -351,21 +351,21 @@ void Game::menuState()
 	play_option.setFont(menu_font);
 	play_option.setCharacterSize(80);
 	play_option.setFillColor(sf::Color(255,255,255,255));
-	play_option.setPosition(window.getSize().x / 2 - play_option.getGlobalBounds().width / 2, 650);
+	play_option.setPosition(window.getSize().x / 2 - play_option.getGlobalBounds().width / 2, 550);
 
 	// instruction button
 	instruction_option.setString("INSTRUCTIONS");
 	instruction_option.setFont(menu_font);
 	instruction_option.setCharacterSize(80);
 	instruction_option.setFillColor(sf::Color(255, 255, 255, 255));
-	instruction_option.setPosition(window.getSize().x / 2 - instruction_option.getGlobalBounds().width / 2, 760);
+	instruction_option.setPosition(window.getSize().x / 2 - instruction_option.getGlobalBounds().width / 2, 660);
 
 	// quit button
 	quit_option.setString("QUIT");
 	quit_option.setFont(menu_font);
 	quit_option.setCharacterSize(80);
 	quit_option.setFillColor(sf::Color(255, 255, 255, 255));
-	quit_option.setPosition(window.getSize().x / 2 - quit_option.getGlobalBounds().width / 2, 870);
+	quit_option.setPosition(window.getSize().x / 2 - quit_option.getGlobalBounds().width / 2, 770);
 
 }
 
@@ -435,7 +435,7 @@ void Game::endingState()
 	}
 	else if (winner == true)
 	{
-		end_message.setString("YAY!\nFinal Score: " + std::to_string(passes) + "\nFailures: " + std::to_string(failures) + "\nHigh Score: " + std::to_string(highscore));
+		end_message.setString("                                    Good job!\nYou have correctly sorted through " + std::to_string(passes) + " animals\nwith " + std::to_string(failures) + " failures.\n\n                                High Score: " + std::to_string(highscore));
 		end_message.setFont(menu_font);
 		end_message.setColor(sf::Color(255, 255, 255, 255));
 		end_message.setCharacterSize(50);
