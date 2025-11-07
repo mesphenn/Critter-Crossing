@@ -439,7 +439,7 @@ void Game::endingState()
 	}
 	else if (winner == true)
 	{
-		end_message.setString("                                    Good job!\nYou have correctly sorted through " + std::to_string(passes) + " animals\nwith " + std::to_string(failures) + " failures.\n\n                                High Score: " + std::to_string(highscore));
+		end_message.setString("                                    Good job!\nYou have correctly sorted through " + std::to_string(passes) + " animals\nwith " + std::to_string(failures) + " failure(s).\n\n                                High Score: " + std::to_string(highscore));
 		end_message.setFont(menu_font);
 		end_message.setColor(sf::Color(255, 255, 255, 255));
 		end_message.setCharacterSize(50);
