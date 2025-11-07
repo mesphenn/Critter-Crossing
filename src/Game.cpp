@@ -79,13 +79,22 @@ bool Game::init()
 
 	if (!reject_txt.loadFromFile("../Data/Critter Crossing Customs/reject.png"))
 	{
-		std::cout << " Reject texture failed to load";
+		std::cout << " Reject texture failed to load\n";
 	}
 
 	if (!accept_txt.loadFromFile("../Data/Critter Crossing Customs/accept.png"))
 	{
-		std::cout << " Accept texture failed to load";
+		std::cout << " Accept texture failed to load\n";
 	}
+
+	// sounds
+	alarm.initialiseSound(alarm_bf, "../Data/Sounds/alarm_sound.wav");
+	click.initialiseSound(click_bf, "../Data/Sounds/click_noise.wav");
+	correct.initialiseSound(correct_bf, "../Data/Sounds/correct_bell.wav");
+	door.initialiseSound(door_bf, "../Data/Sounds/door_noise.wav");
+	drawer.initialiseSound(drawer_bf, "../Data/Sounds/drawer_sound.wav");
+	stamp_push.initialiseSound(stamp_bf, "../Data/Sounds/stamp_noise.wav");
+	wrong.initialiseSound(wrong_bf, "../Data/Sounds/wrong_bell.wav");
 
 
 	return true;
@@ -171,6 +180,7 @@ void Game::mouseClicked(sf::Event event)
 		// start
 		if (menuCollision(click, play_option))
 		{
+			door.playSound();
 			gameState();
 		}
 		else if (menuCollision(click, instruction_option))

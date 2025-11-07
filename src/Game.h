@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "stamps.h"
+#include "sounds.h"
 
 class Game
 {
@@ -96,20 +97,21 @@ class Game
   sf::Text return_option;
 
   // sounds
-  sf::Sound alarm_sound ;
-  sf::SoundBuffer alarm_buffer;
-  sf::Sound click_sound;
-  sf::SoundBuffer click_buffer;
-  sf::Sound correct_sound;
-  sf::SoundBuffer correct_buffer;
-  sf::Sound door_sound;
-  sf::SoundBuffer door_buffer;
-  sf::Sound drawer_sound;
-  sf::SoundBuffer drawer_buffer;
-  sf::Sound stamp_sound;
-  sf::SoundBuffer stamp_buffer;
-  sf::Sound wrong_sound;
-  sf::SoundBuffer wrong_buffer;
+  Sounds alarm;
+  Sounds click;
+  Sounds correct;
+  Sounds door;
+  Sounds drawer;
+  Sounds stamp_push;
+  Sounds wrong;
+  sf::SoundBuffer alarm_bf;
+  sf::SoundBuffer click_bf;
+  sf::SoundBuffer correct_bf;
+  sf::SoundBuffer door_bf;
+  sf::SoundBuffer drawer_bf;
+  sf::SoundBuffer stamp_bf;
+  sf::SoundBuffer wrong_bf;
+
 
 
 };
