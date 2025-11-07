@@ -183,6 +183,7 @@ void Game::mouseClicked(sf::Event event)
 			door.playSound();
 			gameState();
 		}
+		// instructions
 		else if (menuCollision(click, instruction_option))
 		{
 			clicks.playSound();
@@ -197,12 +198,14 @@ void Game::mouseClicked(sf::Event event)
 	}
 	else if (in_instructions == true && in_menu == false)
 	{
+		// start from instructions
 		if (menuCollision(click, play_option))
 		{
 			door.playSound();
 			gameState();
 		}
 	}
+	// return to menu
 	else if (in_end == true)
 	{
 		if (menuCollision(click, return_option))
@@ -316,9 +319,9 @@ void Game::mouseButtonReleased(sf::Event event)
 	
 }
 
-// collision check system for menu options
 bool Game::menuCollision(sf::Vector2i click, sf::Text text)
 {
+	// collision check system for menu options
 	if (click.x > text.getPosition().x && click.x < text.getPosition().x + text.getGlobalBounds().width && click.y > text.getPosition().y && click.y < text.getPosition().y + text.getGlobalBounds().height)
 	{
 		return true;
@@ -384,7 +387,7 @@ void Game::instructionState()
 	play_option.setFont(menu_font);
 	play_option.setCharacterSize(80);
 	play_option.setFillColor(sf::Color(175, 135, 33, 255));
-	play_option.setPosition(window.getSize().x - play_option.getGlobalBounds().width - 50, 950);
+	play_option.setPosition(window.getSize().x - play_option.getGlobalBounds().width - 125, 700);
 
 
 }
@@ -407,6 +410,7 @@ void Game::gameState()
 
 }
 
+// ending screen
 void Game::endingState()
 {
 	in_menu = false;
@@ -451,11 +455,13 @@ void Game::endingState()
 
 void Game::newAnimal()
 {
+	// resetting the logic
 	passport_accepted = false;
 	passport_rejected = false;
 	stamped = false;
 	returned = false;
 
+	// bringing in new passport and new animal
 	int animal_index = rand() % 3;
 	int passport_index = rand() % 3;
 
@@ -480,6 +486,7 @@ void Game::newAnimal()
 
 void Game::dragSprite(sf::Sprite* sprite)
 {
+	// tracking where the mouse is
 	if (sprite != nullptr)
 	{
 		sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
@@ -492,11 +499,13 @@ void Game::dragSprite(sf::Sprite* sprite)
 
 void Game::stampPosition()
 {
+	// where the stamp is on the passport
 	stamp.setPosition(passport->getPosition().x + 100, passport->getPosition().y + 150);
 }
 
 void Game::checkPassport()
 {
+	// if player matched correctly
 	if (passport_accepted == true && should_accept == true || passport_rejected == true && should_accept == false)
 	{
 		correct.playSound();
@@ -508,6 +517,7 @@ void Game::checkPassport()
 	}
 	else
 	{
+		// if player was wrong
 		wrong.playSound();
 		failures += 1;
 		if (failures <= 2)
@@ -518,6 +528,7 @@ void Game::checkPassport()
 			failure_display.setPosition(window.getSize().x - failure_display.getGlobalBounds().width - 20, 0);
 			newAnimal();
 		}
+		// if player has lost
 		else if (failures == 3)
 		{
 			first_click = false;
@@ -530,6 +541,7 @@ void Game::checkPassport()
 void Game::updateTime()
 {
 	int time_remaining = countdown;
+	// counting down
 	if (countdown >= 0)
 	{
 		countdown_display.setString(std::to_string(time_remaining));
@@ -538,6 +550,7 @@ void Game::updateTime()
 		countdown_display.setColor(sf::Color(255, 255, 255, 255));
 		countdown_display.setPosition(window.getSize().x / 2, 0);
 	}
+	// countdown finished
 	else
 	{
 		alarm.playSound();
