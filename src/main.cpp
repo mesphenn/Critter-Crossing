@@ -9,7 +9,7 @@ int main()
             << std::endl;
 
   // create window and set up
-  sf::RenderWindow window(sf::VideoMode(1700, 1100), "Pawprints, please!");
+  sf::RenderWindow window(sf::VideoMode(1700, 900), "Pawprints, please!");
   window.setFramerateLimit(60);
 
   //initialise an instance of the game class
