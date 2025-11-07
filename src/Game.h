@@ -98,7 +98,7 @@ class Game
 
   // sounds
   Sounds alarm;
-  Sounds click;
+  Sounds clicks;
   Sounds correct;
   Sounds door;
   Sounds drawer;

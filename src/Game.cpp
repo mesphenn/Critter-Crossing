@@ -89,8 +89,8 @@ bool Game::init()
 
 	// sounds
 	alarm.initialiseSound(alarm_bf, "../Data/Sounds/alarm_sound.wav");
-	click.initialiseSound(click_bf, "../Data/Sounds/click_noise.wav");
-	correct.initialiseSound(correct_bf, "../Data/Sounds/correct_bell.wav");
+	clicks.initialiseSound(click_bf, "../Data/Sounds/click_noise.wav");
+	correct.initialiseSound(correct_bf, "../Data/Sounds/correct_bell (1).wav");
 	door.initialiseSound(door_bf, "../Data/Sounds/door_noise.wav");
 	drawer.initialiseSound(drawer_bf, "../Data/Sounds/drawer_sound.wav");
 	stamp_push.initialiseSound(stamp_bf, "../Data/Sounds/stamp_noise.wav");
@@ -185,11 +185,13 @@ void Game::mouseClicked(sf::Event event)
 		}
 		else if (menuCollision(click, instruction_option))
 		{
+			clicks.playSound();
 			instructionState();
 		}
 		// quit
 		else if (menuCollision(click, quit_option))
 		{
+			clicks.playSound();
 			window.close();
 		}
 	}
@@ -197,6 +199,7 @@ void Game::mouseClicked(sf::Event event)
 	{
 		if (menuCollision(click, play_option))
 		{
+			door.playSound();
 			gameState();
 		}
 	}
@@ -204,6 +207,7 @@ void Game::mouseClicked(sf::Event event)
 	{
 		if (menuCollision(click, return_option))
 		{
+			clicks.playSound();
 			menuState();
 		}
 	}
@@ -241,6 +245,7 @@ void Game::mouseClicked(sf::Event event)
 					accept_button.getSprite()->getPosition().y <
 					passport->getPosition().y + passport->getGlobalBounds().height))))
 				{
+					stamp_push.playSound();
 					passport_accepted = true;
 					passport_rejected = false;
 					stamped = true;
@@ -249,7 +254,7 @@ void Game::mouseClicked(sf::Event event)
 						stamp.setTexture(accept_txt);
 						stamp.setScale(1, 1);
 					}
-					
+
 				}
 
 			}
@@ -268,6 +273,7 @@ void Game::mouseClicked(sf::Event event)
 					reject_button.getSprite()->getPosition().y <
 					passport->getPosition().y + passport->getGlobalBounds().height))))
 				{
+					stamp_push.playSound();
 					passport_accepted = false;
 					passport_rejected = true;
 					stamped = true;
@@ -276,23 +282,21 @@ void Game::mouseClicked(sf::Event event)
 						stamp.setTexture(reject_txt);
 						stamp.setScale(1, 1);
 					}
-					
 				}
 			}
-			
-
 		}
 		// showing the stamps
 		else if (event.mouseButton.button == sf::Mouse::Right && show_stamps == false)
 		{
+			drawer.playSound();
 			show_stamps = true;
 		}
 		else if (event.mouseButton.button == sf::Mouse::Right && show_stamps == true)
 		{
+			drawer.playSound();
 			show_stamps = false;
 		}
 	}
-
 }
 
 void Game::mouseButtonReleased(sf::Event event)
@@ -495,6 +499,7 @@ void Game::checkPassport()
 {
 	if (passport_accepted == true && should_accept == true || passport_rejected == true && should_accept == false)
 	{
+		correct.playSound();
 		passes += 1;
 		passes_display.setString("CORRECT: " + std::to_string(passes));
 		passes_display.setFont(menu_font);
@@ -503,6 +508,7 @@ void Game::checkPassport()
 	}
 	else
 	{
+		wrong.playSound();
 		failures += 1;
 		if (failures <= 2)
 		{
@@ -534,6 +540,7 @@ void Game::updateTime()
 	}
 	else
 	{
+		alarm.playSound();
 		first_click = false;
 		winner = true;
 		endingState();
