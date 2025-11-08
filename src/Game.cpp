@@ -112,6 +112,7 @@ void Game::update(float dt)
 
 		if (first_click == true)
 		{
+			// updating countdown
 			countdown -= dt;
 			updateTime();
 		}
