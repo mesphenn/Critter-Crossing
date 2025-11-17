@@ -21,12 +21,12 @@ bool Stamps::initialiseSprite(sf::Texture& texture, std::string filename)
 	{
 		std::cout << "Error loading stamp file: " << filename << "\n";
 	}
-	sprite->setTexture(texture);
+	sprite2.get()->setTexture(texture);
 	return true;
 }
 
-sf::Sprite* Stamps::getSprite()
+std::unique_ptr<sf::Sprite>& Stamps::getSprite()
 {
-	return sprite;
+	return sprite2;
 }
 
