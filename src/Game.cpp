@@ -108,6 +108,11 @@ void Game::update(float dt)
 	}
 	if (in_game == true)
 	{
+		if (dragging == true)
+		{
+			dragOffset(dragged);
+		}
+
 		dragSprite(dragged);
 
 		if (first_click == true)
@@ -308,6 +313,7 @@ void Game::mouseButtonReleased(sf::Event event)
 	// releasing the passport
 	if (in_game == true)
 	{
+		dragging = true;
 		dragged = nullptr;
 	}
 
@@ -493,8 +499,23 @@ void Game::dragSprite(sf::Sprite* sprite)
 		sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
 		sf::Vector2f mouse_positionf = static_cast<sf::Vector2f>(mouse_position);
 
-		sf::Vector2f drag_position = mouse_positionf;
+
+		sf::Vector2f drag_position = mouse_positionf - drag_offset;
 		sprite->setPosition(drag_position.x, drag_position.y);
+	}
+}
+
+void Game::dragOffset(sf::Sprite* sprite)
+{
+	if (sprite != nullptr)
+	{
+		sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
+		sf::Vector2f mouse_positionf = static_cast<sf::Vector2f>(mouse_position);
+
+		float x = mouse_position.x - sprite->getPosition().x;
+		float y = mouse_position.y - sprite->getPosition().y;
+		drag_offset = { x,y };
+		dragging = false;
 	}
 }
 

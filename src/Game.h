@@ -19,6 +19,7 @@ class Game
   void mouseButtonReleased(sf::Event event);
   void newAnimal();
   void dragSprite(sf::Sprite* sprite);
+  void dragOffset(sf::Sprite* sprite);
   void stampPosition();
   void checkPassport();
   void updateTime();
@@ -49,6 +50,7 @@ class Game
 
   // Game screen
   bool in_game = false;
+  bool dragging = true;
   sf::Texture main_bg_txt;
   sf::Vector2f drag_offset;
 
